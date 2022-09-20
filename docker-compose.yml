@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  php-nginx:
+    container_name: "LDSK-Web-App"
+    environment:
+      - WEB_DOCUMENT_ROOT="/app/public"
+    image: webdevops/php-nginx:7.4
+    ports:
+      - "${DOCKER_WEB_PORT}:80"
+      - "${DOCKER_WEB_SSL_PORT}:443"
+    volumes:
+      - ./:/app
+    working_dir: /app/public
+
+  db:
+    container_name: "LDSK--Database"
+    image: mysql:5.7
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=ldsk_dev
+    volumes:
+      - ./docker/db:/var/lib/mysql
+    ports:
+      - "${DOCKER_DATABASE_PORT}:3306"
+
